@@ -1,0 +1,32 @@
+import hockeybooking.Training
+
+model {
+    List<Training> trainingList
+}
+
+json {
+    trainings trainingList.collect { t ->
+        [
+                date       : t.date,
+                team       : t.team.name,
+                trainers   : t.team.trainers.collect { tr ->
+                    [name : tr.name,
+                     email: tr.email]
+                },
+                terrain    : t.terrainAssistant,
+                field      : t.fieldAssistant,
+                hygienic   : t.hygienicAssistant,
+                playerCount: t.registeredPlayers.size(),
+                maxPlayers : t.maxPlayers,
+                reviewed   : t.reviewed,
+                players    : t.registeredPlayers.collect { p ->
+                    [
+                            name       : p.name,
+                            email      : p.email,
+                            responsible: p.responsible
+                    ]
+                }
+        ]
+    }
+    generatedAt(new Date())
+}
